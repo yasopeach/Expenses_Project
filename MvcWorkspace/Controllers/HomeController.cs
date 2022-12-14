@@ -2,7 +2,7 @@
 using MvcWorkspace.Models;
 using System.Diagnostics;
 
-namespace MvcWorkspace.Controllers
+namespace MvcWorkspace.Controllers  
 {
     public class HomeController : Controller
     {
@@ -14,11 +14,6 @@ namespace MvcWorkspace.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
