@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MvcWorkspace.Models;
 
 namespace MvcWorkspace.Data
 {
@@ -8,7 +9,9 @@ namespace MvcWorkspace.Data
         {
 
         }
+
+        public DbSet<Expense> Expenses { get; set; }
     }
 
-    //DbSet'ler
+    //DbSet'ler  
 }
