@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcWorkspace.Models
 {
@@ -15,5 +17,11 @@ namespace MvcWorkspace.Models
         [Range(1, int.MaxValue, ErrorMessage="Yanlış Değer")]
         public int Amount { get; set; }
 
+
+        [DisplayName("Expense Category")]
+        public int ExpenseCategoryId { get; set; }
+
+        [ForeignKey("ExpenseCategoryId")]
+        public ExpenseCategory ExpenseCategory { get; set; }
     }
 }
