@@ -11,6 +11,8 @@ namespace MvcWorkspace.Data
         }
 
         public DbSet<Expense> Expenses { get; set; }
+
+        public DbSet<ExpenseCategory> Categories { get; set; }
     }
 
     //DbSet'ler  

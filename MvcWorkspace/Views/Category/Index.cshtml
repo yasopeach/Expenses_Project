@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MvcWorkspace.Models.ExpenseCategory>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Categories List</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Category" asp-action="AddOrUpdate" class="btn btn-primary">Create new Category</a>
+        </div>
+    </div>
+    <br />
+
+    @if(Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr class="align-middle text-primary">
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var category in Model)
+                {
+                <tr class="align-middle">
+                    <td width="25%">@category.Id</td>
+                    <td width="20%">@category.CategoryName</td>
+                    <td width="30%" class="">
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-controller="Category" asp-action="AddOrUpdate" asp-route-Id="@category.Id" class="btn btn-outline-primary mx-2">Update</a>
+                            <a asp-controller="Category" asp-action="Delete" asp-route-Id="@category.Id" class="btn btn-outline-danger mx-2">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table> 
+    }
+    else
+    {
+        <p>No items created yet</p>
+    }
+
+</div>
