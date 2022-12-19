@@ -22,6 +22,7 @@
                     <th>
                         Amount
                     </th>
+                    <th>Category</th>
                     <th>
 
                     </th>
@@ -33,6 +34,7 @@
                 <tr class="align-middle">
                     <td width="25%">@expense.ExpenseName</td>
                     <td width="20%">@expense.Amount</td>
+                    <td width="25">@expense.ExpenseCategory.CategoryName</td>
                     <td width="30%" class="">
                         <div class="w-100 btn-group" role="group">
                             <a asp-controller="Expense" asp-action="AddOrUpdate" asp-route-Id="@expense.Id" class="btn btn-outline-primary mx-2">Update</a>

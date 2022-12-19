@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MvcWorkspace.Data;
 using MvcWorkspace.Models;
 using MvcWorkspace.Models.ViewModels;
@@ -16,7 +17,16 @@ namespace MvcWorkspace.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Expense> ExpenseList = _db.Expenses;
+            //IEnumerable<Expense> ExpenseList = _db.Expenses;
+
+            //foreach (var exp in ExpenseList)
+            //{
+            //    exp.ExpenseCategory = _db.Categories.FirstOrDefault(e => e.Id == exp.ExpenseCategoryId);
+
+            //}
+
+            // EAGER LOADING
+            IEnumerable<Expense> ExpenseList = _db.Expenses.Include(u => u.ExpenseCategory);
 
             return View(ExpenseList);
         }
