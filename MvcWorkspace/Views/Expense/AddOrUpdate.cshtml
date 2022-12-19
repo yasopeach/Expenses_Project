@@ -1,19 +1,26 @@
-﻿@model MvcWorkspace.Models.Expense
+﻿@model MvcWorkspace.Models.ViewModels.ExpenseVM
 
 <form method="post" asp-action="AddOrUpdate">
     <div class="p-3 col-12">
-         <input type="hidden" asp-for="Id" />
+         <input type="hidden" asp-for="Expense.Id" />
         <h2 class="text-black-50 pl-3">Add Expense</h2>
         <div class="row col-6">
             <div class="pb-3">
-                <label asp-for="ExpenseName" class="form-label"></label>
-                <input asp-for="ExpenseName" class="form-control"/>
-                <span asp-validation-for="ExpenseName" class="text-danger"></span>
+                <label asp-for="Expense.ExpenseName" class="form-label"></label>
+                <input asp-for="Expense.ExpenseName" class="form-control"/>
+                <span asp-validation-for="Expense.ExpenseName" class="text-danger"></span>
             </div>
             <div class="pb-3">
-                <label asp-for="Amount" class="form-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+                <label asp-for="Expense.Amount" class="form-label"></label>
+                <input asp-for="Expense.Amount" class="form-control" />
+                <span asp-validation-for="Expense.Amount" class="text-danger"></span>
+            </div>
+             <div class="pb-3">
+                <label asp-for="Expense.ExpenseCategoryId" class="form-label"></label>
+                <select asp-for="Expense.ExpenseCategoryId" class="form-control" asp-items="@Model.CategoryDropDown" >
+                    <option disabled selected >--- Select Category ---</option>
+                </select>
+                <span asp-validation-for="Expense.ExpenseCategoryId" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
@@ -23,7 +30,7 @@
             <div class="col-3 text-end">
 
                 @{
-                    if(Model.Id == 0)
+                    if(Model.Expense.Id == 0)
                     {
                         <input type="submit" class="btn btn-info w-100" value="Create" />
                     }

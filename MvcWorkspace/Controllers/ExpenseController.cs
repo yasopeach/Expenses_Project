@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcWorkspace.Data;
 using MvcWorkspace.Models;
+using MvcWorkspace.Models.ViewModels;
 
-namespace InAndOut.Controllers
+namespace MvcWorkspace.Controllers
 {
     public class ExpenseController : Controller
     {
@@ -22,10 +24,40 @@ namespace InAndOut.Controllers
         //GET- Add or Edit
         public IActionResult AddOrUpdate(int id)
         {
-            if (id == 0)
-                return View(new Expense());
-            else
-                return View(_db.Expenses.Find(id));
+            ExpenseVM expenseVM = new ExpenseVM()
+            {
+                Expense = new Expense(),
+                CategoryDropDown = _db.Categories.Select(i =>
+                                    new SelectListItem
+                                    {
+                                        Text = i.CategoryName,
+                                        Value = i.Id.ToString()
+                                    })
+
+        };
+
+
+
+            //IEnumerable<SelectListItem> CategoryDropDown = _db.Categories.Select(i =>
+            //new SelectListItem 
+            //{ 
+            //    Text=i.CategoryName, 
+            //    Value = i.Id.ToString() 
+            //});
+
+            //ViewBag.CategoryDropDown = CategoryDropDown;
+
+
+
+            if (id == 0) 
+            { 
+                return View(expenseVM);
+            }
+            else 
+            { 
+                expenseVM.Expense = _db.Expenses.Find(id);
+                return View(expenseVM);
+            }
         }
 
         //POST : Add or Edit
