@@ -103,5 +103,21 @@ namespace MvcWorkspace.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        // GET : Expense By Category
+        public IActionResult ExpensesByCategory(int id)
+        {
+
+            IEnumerable<Expense> expenseByCatList = _db.Expenses.Where(x => x.ExpenseCategoryId == id);
+
+            int totalAmount = 0;
+            foreach (var e in expenseByCatList)
+            {
+                totalAmount += e.Amount;
+            }
+
+            ViewBag.totalAmount = totalAmount;
+            return View(expenseByCatList);
+        }
     }
 }
