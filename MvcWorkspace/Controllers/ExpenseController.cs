@@ -4,16 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using MvcWorkspace.Data;
 using MvcWorkspace.Models;
 using MvcWorkspace.Models.ViewModels;
+using MvcWorkspace.Services;
 
 namespace MvcWorkspace.Controllers
 {
     public class ExpenseController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IExpenseService _service;
 
-        public ExpenseController(AppDbContext db)
+        public ExpenseController(IExpenseService service)
         {
-            _db = db;
+            _service = service;
         }
         public IActionResult Index()
         {
@@ -26,8 +27,7 @@ namespace MvcWorkspace.Controllers
             //}
 
             // EAGER LOADING
-            IEnumerable<Expense> ExpenseList = _db.Expenses.Include(u => u.ExpenseCategory);
-
+            IEnumerable<Expense> ExpenseList = _service.GetExpenses();
             return View(ExpenseList);
         }
 
@@ -37,16 +37,9 @@ namespace MvcWorkspace.Controllers
             ExpenseVM expenseVM = new ExpenseVM()
             {
                 Expense = new Expense(),
-                CategoryDropDown = _db.Categories.Select(i =>
-                                    new SelectListItem
-                                    {
-                                        Text = i.CategoryName,
-                                        Value = i.Id.ToString()
-                                    })
+                CategoryDropDown = _service.CategorySelectListItems()
 
         };
-
-
 
             //IEnumerable<SelectListItem> CategoryDropDown = _db.Categories.Select(i =>
             //new SelectListItem 
@@ -57,15 +50,13 @@ namespace MvcWorkspace.Controllers
 
             //ViewBag.CategoryDropDown = CategoryDropDown;
 
-
-
             if (id == 0) 
             { 
                 return View(expenseVM);
             }
             else 
             { 
-                expenseVM.Expense = _db.Expenses.Find(id);
+                expenseVM.Expense = _service.GetExpense(id);
                 return View(expenseVM);
             }
         }
@@ -78,14 +69,10 @@ namespace MvcWorkspace.Controllers
             if (ModelState.IsValid) // Server side Validation
             {
                 if (expense.Id == 0)
-                {
-                    _db.Add(expense);
-                }
+                    _service.Add(expense);   
                 else
-                {
-                    _db.Update(expense);
-                }
-                _db.SaveChanges();
+                    _service.Update(expense);
+
                 return RedirectToAction("Index");
             }
             return View(expense);
@@ -94,30 +81,33 @@ namespace MvcWorkspace.Controllers
         //Delete
         public IActionResult Delete(int id)
         {
-            var obj = _db.Expenses.Find(id);
-            if (obj == null)
+            if (_service.Delete(id))
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
-            _db.Expenses.Remove(obj);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            return NotFound();
         }
 
         // GET : Expense By Category
         public IActionResult ExpensesByCategory(int id)
         {
+            IEnumerable<Expense> expenseByCatList = _service.GetExpensesByCategory(id);
 
-            IEnumerable<Expense> expenseByCatList = _db.Expenses.Where(x => x.ExpenseCategoryId == id);
+            ViewBag.catName = _service.GetCategoryName(id);
 
+            ViewBag.totalAmount = GetTotal(expenseByCatList);
+            return View(expenseByCatList);
+        }
+
+        private int GetTotal(IEnumerable<Expense> list)
+        {
             int totalAmount = 0;
-            foreach (var e in expenseByCatList)
+            foreach (var e in list)
             {
                 totalAmount += e.Amount;
             }
+            return totalAmount;
 
-            ViewBag.totalAmount = totalAmount;
-            return View(expenseByCatList);
         }
     }
 }

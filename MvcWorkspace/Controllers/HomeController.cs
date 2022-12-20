@@ -15,6 +15,7 @@ namespace MvcWorkspace.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
